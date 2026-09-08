@@ -1,62 +1,260 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sistema Abençoada V4</title>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sistema Abençoada V5</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f4ead8;color:#31180e}
-header{background:linear-gradient(#57260f,#321307);color:#fff;padding:14px;border-bottom:4px solid #b30c0c;position:sticky;top:0;z-index:10}
-.brand{font-size:26px;font-weight:900}.tag{color:#ffd43b;font-style:italic}
-nav,.cats{display:flex;gap:7px;overflow:auto;margin-top:10px}button{border:0;font:inherit;cursor:pointer}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4ead8;color:#31180e}
+header{background:linear-gradient(#57260f,#321307);color:#fff;padding:14px;border-bottom:4px solid #b30c0c;position:sticky;top:0;z-index:20}
+.brand{font-size:26px;font-weight:900}.tag{color:#ffd43b;font-style:italic}.version{font-size:11px;opacity:.75;margin-top:3px}
+nav,.cats{display:flex;gap:7px;overflow:auto;margin-top:10px;padding-bottom:2px}button{border:0;font:inherit;cursor:pointer}
 nav button,.cat{padding:10px 13px;border-radius:10px;background:#fff0d7;font-weight:800;white-space:nowrap}nav .active,.cat.active{background:#b70b0b;color:#fff}
-main{max-width:1200px;margin:auto;padding:12px}.screen{display:none}.screen.active{display:block}
+main{max-width:1250px;margin:auto;padding:12px}.screen{display:none}.screen.active{display:block}
 .layout{display:grid;grid-template-columns:1.45fr .55fr;gap:12px}.panel{background:#fff9ec;border:1px solid #d8c19c;border-radius:15px;padding:13px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
-.product{padding:0;background:#fff;border:2px solid #d7b77f;border-radius:14px;overflow:hidden;text-align:left}
-.product img{width:100%;height:210px;object-fit:cover;display:block}.info{padding:9px;background:#fff1d5}.name{font-weight:900;font-size:17px}.price{display:inline-block;background:#a90b0b;color:#fff;font-size:18px;font-weight:900;padding:6px 9px;border-radius:7px;margin-top:6px}
-.line{padding:9px 0;border-bottom:1px solid #dec9a7}.small{font-size:12px;color:#6c5847}.total{font-size:27px;font-weight:900;margin:14px 0}
-.payments{display:grid;grid-template-columns:1fr 1fr;gap:7px}.pay,.secondary{padding:11px;border-radius:9px;background:#eadcc7;font-weight:800}.pay.selected{background:#362016;color:#fff}
-.primary{padding:13px;border-radius:9px;background:#27883b;color:#fff;font-weight:900;width:100%;font-size:17px}
-.ticketcard{background:#fff;border-left:7px solid #e36c00;border-radius:12px;padding:14px;margin-bottom:10px}.ticketcard.ready{border-left-color:#27883b}.ticket{font-size:38px;font-weight:900}
-.readybox{border:3px solid #27883b;background:#fff;border-radius:15px;padding:20px;text-align:center;margin-bottom:10px}.readybox .ticket{font-size:60px}
-.modal{display:none;position:fixed;inset:0;background:#0009;z-index:30;padding:12px;align-items:center;justify-content:center}.modal.open{display:flex}.modalbox{width:min(620px,100%);max-height:92vh;overflow:auto;background:#fff8e9;border-radius:15px;padding:16px}
-.options{display:grid;grid-template-columns:1fr 1fr;gap:7px}.opt{padding:11px;border-radius:9px;background:#eadcc7;font-weight:800}.opt.selected{background:#a90b0b;color:#fff}textarea{width:100%;min-height:65px;border:1px solid #cdb48f;border-radius:8px;padding:9px}
-@media(max-width:800px){.layout{grid-template-columns:1fr}.product img{height:180px}}
-@media(max-width:480px){main{padding:7px}.grid{gap:7px}.product img{height:145px}.name{font-size:14px}.price{font-size:16px}.brand{font-size:22px}}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.product{padding:0;background:#fff;border:2px solid #d7b77f;border-radius:14px;overflow:hidden;text-align:left;position:relative}.product:hover{transform:translateY(-1px)}
+.product img,.placeholder{width:100%;height:210px;object-fit:cover;display:block}.placeholder{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ead8b6,#fff3da);font-size:56px}.info{padding:9px;background:#fff1d5}.name{font-weight:900;font-size:17px}.desc{font-size:12px;color:#6c5847;margin-top:4px}.price{display:inline-block;background:#a90b0b;color:#fff;font-size:18px;font-weight:900;padding:6px 9px;border-radius:7px;margin-top:6px}.sizes{font-size:13px;font-weight:800;margin-top:7px}
+.line{padding:9px 0;border-bottom:1px solid #dec9a7}.line-row{display:flex;gap:8px;justify-content:space-between;align-items:flex-start}.small{font-size:12px;color:#6c5847}.total{font-size:27px;font-weight:900;margin:14px 0}.remove{background:#f1d5cf;color:#8e150d;border-radius:7px;padding:5px 8px;font-weight:800}
+.payments{display:grid;grid-template-columns:1fr 1fr;gap:7px}.pay,.secondary{padding:11px;border-radius:9px;background:#eadcc7;font-weight:800}.pay.selected{background:#362016;color:#fff}.primary{padding:13px;border-radius:9px;background:#27883b;color:#fff;font-weight:900;width:100%;font-size:17px}.danger{padding:10px;border-radius:9px;background:#9d1a11;color:#fff;font-weight:800}
+.ticketcard{background:#fff;border-left:7px solid #e36c00;border-radius:12px;padding:14px;margin-bottom:10px}.ticketcard.ready{border-left-color:#27883b}.ticket{font-size:38px;font-weight:900}.readybox{border:3px solid #27883b;background:#fff;border-radius:15px;padding:20px;text-align:center;margin-bottom:10px}.readybox .ticket{font-size:60px}
+.modal{display:none;position:fixed;inset:0;background:#0009;z-index:50;padding:12px;align-items:center;justify-content:center}.modal.open{display:flex}.modalbox{width:min(650px,100%);max-height:92vh;overflow:auto;background:#fff8e9;border-radius:15px;padding:16px}.options{display:grid;grid-template-columns:1fr 1fr;gap:7px}.opt{padding:11px;border-radius:9px;background:#eadcc7;font-weight:800}.opt.selected{background:#a90b0b;color:#fff}textarea,input,select{font:inherit}.note{width:100%;min-height:65px;border:1px solid #cdb48f;border-radius:8px;padding:9px}
+.empty{padding:28px;text-align:center;border:2px dashed #d7b77f;border-radius:12px;background:#fffdf7;color:#6c5847}.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#eee0c8;font-size:12px;font-weight:800;margin-top:5px}
+.admin-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.admin-top label{font-weight:800}.admin-top input{width:100%;padding:9px;border:1px solid #cdb48f;border-radius:8px;margin-top:5px}.admin-table{width:100%;border-collapse:collapse}.admin-table th,.admin-table td{padding:9px;border-bottom:1px solid #dfc9a8;text-align:left;vertical-align:middle}.admin-table th{background:#f0dfc4}.admin-table input[type=number]{width:100px;padding:7px;border:1px solid #cdb48f;border-radius:7px}.switch{display:inline-flex;align-items:center;gap:6px;font-weight:700}.hint{background:#fff2c9;border-left:4px solid #e0a400;padding:10px;border-radius:8px;margin-bottom:12px}.section-title{margin-top:18px;margin-bottom:7px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.product img,.placeholder{height:180px}.admin-table{font-size:13px}.admin-table th:nth-child(2),.admin-table td:nth-child(2){display:none}.admin-top{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:480px){main{padding:7px}.grid{gap:7px}.product img,.placeholder{height:145px}.name{font-size:14px}.price{font-size:16px}.brand{font-size:22px}.admin-top{grid-template-columns:1fr}.admin-table input[type=number]{width:78px}}
 @media print{body *{visibility:hidden!important}#receipt,#receipt *{visibility:visible!important}#receipt{display:block!important;position:absolute;left:0;top:0;width:72mm;padding:2mm;font-family:monospace}}#receipt{display:none}
-</style></head><body>
-<header><div class="brand">Restaurante e Lanchonete ABENÇOADA</div><div class="tag">Comida caseira feita com amor!</div>
-<nav><button class="active" onclick="screen('atendimento',this)">Atendimento</button><button onclick="screen('cozinha',this)">Cozinha</button><button onclick="screen('senhas',this)">Senhas</button></nav></header>
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Restaurante e Lanchonete ABENÇOADA</div>
+  <div class="tag">Comida caseira feita com amor!</div>
+  <div class="version">Sistema V5 — cardápio completo</div>
+  <nav>
+    <button class="active" onclick="screen('atendimento',this)">Atendimento</button>
+    <button onclick="screen('cozinha',this)">Cozinha</button>
+    <button onclick="screen('senhas',this)">Senhas</button>
+    <button onclick="screen('gerenciar',this)">Gerenciar cardápio</button>
+  </nav>
+</header>
 <main>
-<section id="atendimento" class="screen active"><div class="layout"><div class="panel"><h2>Cardápio</h2><div id="cats" class="cats"></div><div id="grid" class="grid"></div></div>
-<div class="panel"><h2>Pedido</h2><div id="cart"><span class="small">Nenhum item.</span></div><div class="total">Total: <span id="total">R$ 0,00</span></div><h3>Pagamento</h3><div class="payments"><button class="pay" onclick="paySel('Dinheiro',this)">Dinheiro</button><button class="pay" onclick="paySel('Pix',this)">Pix</button><button class="pay" onclick="paySel('Débito',this)">Débito</button><button class="pay" onclick="paySel('Crédito',this)">Crédito</button></div><br><button class="primary" onclick="finish()">Confirmar e imprimir senha</button><br><br><button class="secondary" style="width:100%" onclick="clearCart()">Limpar pedido</button></div></div></section>
+<section id="atendimento" class="screen active">
+  <div class="layout">
+    <div class="panel">
+      <h2>Cardápio</h2>
+      <div id="cats" class="cats"></div>
+      <div id="grid" class="grid"></div>
+    </div>
+    <div class="panel">
+      <h2>Pedido</h2>
+      <div id="cart"><span class="small">Nenhum item.</span></div>
+      <div class="total">Total: <span id="total">R$ 0,00</span></div>
+      <h3>Pagamento</h3>
+      <div class="payments">
+        <button class="pay" onclick="paySel('Dinheiro',this)">Dinheiro</button>
+        <button class="pay" onclick="paySel('Pix',this)">Pix</button>
+        <button class="pay" onclick="paySel('Débito',this)">Débito</button>
+        <button class="pay" onclick="paySel('Crédito',this)">Crédito</button>
+      </div>
+      <br><button class="primary" onclick="finish()">Confirmar e imprimir senha</button>
+      <br><br><button class="secondary" style="width:100%" onclick="clearCart()">Limpar pedido</button>
+    </div>
+  </div>
+</section>
 <section id="cozinha" class="screen"><div class="panel"><h2>Pedidos da cozinha</h2><div id="kitchen"></div></div></section>
 <section id="senhas" class="screen"><div class="panel"><h2>Senhas prontas</h2><div id="ready"></div></div></section>
+<section id="gerenciar" class="screen">
+  <div class="panel">
+    <h2>Gerenciar cardápio</h2>
+    <div class="hint"><b>Como usar:</b> marque somente o que está disponível hoje. Os itens sem preço ficam desativados até o valor ser informado. As marmitas usam os preços por tamanho abaixo.</div>
+    <h3>Preços das marmitas</h3>
+    <div class="admin-top">
+      <label>P<input id="mp" type="number" min="0" step="0.50" onchange="saveMarmitaPrices()"></label>
+      <label>M<input id="mm" type="number" min="0" step="0.50" onchange="saveMarmitaPrices()"></label>
+      <label>G<input id="mg" type="number" min="0" step="0.50" onchange="saveMarmitaPrices()"></label>
+    </div>
+    <div id="adminCatalog"></div>
+  </div>
+</section>
 </main>
-<div id="modal" class="modal"><div class="modalbox"><h2 id="modalTitle"></h2><div id="modalBody"></div><h3>Observação</h3><textarea id="note" placeholder="Ex.: sem cebola, bem passado..."></textarea><br><br><button class="primary" onclick="addConfigured()">Adicionar</button><br><br><button class="secondary" style="width:100%" onclick="closeModal()">Cancelar</button></div></div>
+<div id="modal" class="modal">
+  <div class="modalbox">
+    <h2 id="modalTitle"></h2>
+    <div id="modalBody"></div>
+    <h3>Observação</h3>
+    <textarea id="note" class="note" placeholder="Ex.: sem cebola, bem passado..."></textarea>
+    <br><br><button class="primary" onclick="addConfigured()">Adicionar</button>
+    <br><br><button class="secondary" style="width:100%" onclick="closeModal()">Cancelar</button>
+  </div>
+</div>
 <div id="receipt"></div>
 <script>
-var products=[{"cat": "Pratos", "name": "Parmegiana", "price": 22, "img": "assets/parmegiana.jpg", "type": "prato"}, {"cat": "Pratos", "name": "Bife Acebolado", "price": 22, "img": "assets/bife_acebolado.jpg", "type": "prato"}, {"cat": "Pratos", "name": "Frango à Milanesa", "price": 20, "img": "assets/frango_milanesa.jpg", "type": "prato"}, {"cat": "Pratos", "name": "Strogonoff", "price": 20, "img": "assets/strogonoff.jpg", "type": "prato"}, {"cat": "Marmitas", "name": "Marmita P", "price": 15, "img": "assets/frango_milanesa.jpg", "type": "marmita"}, {"cat": "Marmitas", "name": "Marmita M", "price": 20, "img": "assets/bife_acebolado.jpg", "type": "marmita"}, {"cat": "Marmitas", "name": "Marmita G", "price": 26, "img": "assets/strogonoff.jpg", "type": "marmita"}, {"cat": "Cuscuz", "name": "Cuscuz com Ovo + Café", "price": 8, "img": "assets/cuscuz_ovo.jpg", "type": "direto"}, {"cat": "Cuscuz", "name": "Cuscuz com Queijo + Café", "price": 8, "img": "assets/cuscuz_queijo.jpg", "type": "direto"}, {"cat": "Cuscuz", "name": "Cuscuz Queijo e Presunto + Café", "price": 8, "img": "assets/cuscuz_presunto.jpg", "type": "direto"}, {"cat": "Cuscuz", "name": "Cuscuz Completo + Café", "price": 10, "img": "assets/cuscuz_completo.jpg", "type": "direto"}, {"cat": "Lanches", "name": "Bolo + Café", "price": 8, "img": "assets/bolo_cafe.jpg", "type": "direto"}, {"cat": "Lanches", "name": "Sanduíche Natural + Suco ou Café", "price": 8, "img": "assets/sanduiche_natural.jpg", "type": "direto"}, {"cat": "Lanches", "name": "Misto Quente + Suco ou Café", "price": 8, "img": "assets/misto_quente.jpg", "type": "direto"}, {"cat": "Lanches", "name": "Pão de Sal com Carne + Suco ou Café", "price": 8, "img": "assets/pao_carne.jpg", "type": "direto"}, {"cat": "Tapiocas", "name": "Tapioca Queijo e Presunto + Suco ou Café", "price": 8, "img": "assets/tapioca_presunto.jpg", "type": "direto"}, {"cat": "Tapiocas", "name": "Tapioca de Queijo + Suco ou Café", "price": 8, "img": "assets/tapioca_queijo.jpg", "type": "direto"}, {"cat": "Tapiocas", "name": "Tapioca de Carne + Suco ou Café", "price": 10, "img": "assets/tapioca_carne.jpg", "type": "direto"}, {"cat": "Salgados", "name": "Coxinha de Frango + Suco", "price": 7, "img": "assets/coxinha.jpg", "type": "direto"}, {"cat": "Salgados", "name": "Pastel Queijo/Presunto + Suco", "price": 10, "img": "assets/pastel_queijo.jpg", "type": "direto"}, {"cat": "Salgados", "name": "Pastel Frango/Carne + Suco", "price": 12, "img": "assets/pastel_carne.jpg", "type": "direto"}, {"cat": "Salgados", "name": "Salgado Assado + Suco", "price": 10, "img": "assets/salgado_assado.jpg", "type": "direto"}, {"cat": "Vitaminas", "name": "Vitamina de Abacate + Whey", "price": 10, "img": "assets/vitamina_abacate.jpg", "type": "direto"}, {"cat": "Vitaminas", "name": "Vitamina de Morango + Whey", "price": 10, "img": "assets/vitamina_morango.jpg", "type": "direto"}, {"cat": "Vitaminas", "name": "Vitamina de Banana + Whey", "price": 10, "img": "assets/vitamina_banana.jpg", "type": "direto"}, {"cat": "Vitaminas", "name": "Vitamina de Manga + Whey", "price": 10, "img": "assets/vitamina_manga.jpg", "type": "direto"}]; var category="Pratos", cart=[], payment="", draft=null, protein="", sides=[];
-var orders=[];try{orders=JSON.parse(localStorage.getItem("ab_v4_orders")||"[]")||[]}catch(e){orders=[]}
-function money(v){return "R$ "+Number(v).toFixed(2).replace(".",",")}
-function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
-function today(){var d=new Date(),m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(x<10?"0":"")+x}
-function save(){try{localStorage.setItem("ab_v4_orders",JSON.stringify(orders))}catch(e){}}
-function renderCats(){var a=["Pratos","Marmitas","Cuscuz","Lanches","Tapiocas","Salgados","Vitaminas"];document.getElementById("cats").innerHTML=a.map(function(c){return '<button class="cat '+(c===category?'active':'')+'" onclick="setCat(\''+c+'\')">'+c+'</button>'}).join("")}
+const categoryLabels={
+  'Pratos':'Pratos individuais','Marmitas':'Marmitas do dia','Cuscuz':'Cuscuz','Lanches':'Lanches','Tapiocas':'Tapiocas','Salgados':'Salgados','Vitaminas':'Vitaminas + Whey','Caldos':'Caldos','Bebidas':'Bebidas'
+};
+const categories=['Pratos','Marmitas','Cuscuz','Lanches','Tapiocas','Salgados','Vitaminas','Caldos','Bebidas'];
+const defaults=[
+  {id:'p_bife_acebolado',cat:'Pratos',name:'Bife Acebolado',price:20,img:'assets/bife_acebolado.jpg',type:'prato',active:true},
+  {id:'p_bife_fritas',cat:'Pratos',name:'Bife com Fritas',price:22,img:'',type:'prato',active:true},
+  {id:'p_bife_parmegiana',cat:'Pratos',name:'Bife à Parmegiana',price:25,img:'assets/parmegiana.jpg',type:'prato',active:true},
+  {id:'p_file_frango',cat:'Pratos',name:'Filé de Frango',price:18,img:'',type:'prato',active:true},
+  {id:'p_file_frango_fritas',cat:'Pratos',name:'Filé de Frango com Fritas',price:20,img:'',type:'prato',active:true},
+  {id:'p_file_frango_parmegiana',cat:'Pratos',name:'Filé de Frango à Parmegiana',price:23,img:'assets/parmegiana.jpg',type:'prato',active:true},
+  {id:'p_frango_milanesa',cat:'Pratos',name:'Frango à Milanesa',price:20,img:'assets/frango_milanesa.jpg',type:'prato',active:true,desc:'Filé verdadeiro de peito empanado em panko.'},
+  {id:'p_strogonoff',cat:'Pratos',name:'Strogonoff de Frango',price:20,img:'assets/strogonoff.jpg',type:'prato',active:true},
+  {id:'p_costela_mandioca',cat:'Pratos',name:'Costela com Mandioca',price:25,img:'',type:'prato',active:true},
+  {id:'p_calabresa',cat:'Pratos',name:'Calabresa Acebolada',price:0,img:'',type:'prato',active:false},
+  {id:'p_calabresa_fritas',cat:'Pratos',name:'Calabresa com Fritas',price:0,img:'',type:'prato',active:false},
+  {id:'p_calabresa_parmegiana',cat:'Pratos',name:'Calabresa à Parmegiana',price:0,img:'',type:'prato',active:false},
+  {id:'p_bisteca',cat:'Pratos',name:'Bisteca Suína',price:0,img:'',type:'prato',active:false},
+  {id:'p_tirinhas',cat:'Pratos',name:'Tirinhas de Carne ao Molho Shoyu',price:0,img:'',type:'prato',active:false},
+  {id:'p_almondegas',cat:'Pratos',name:'Almôndegas',price:0,img:'',type:'prato',active:false},
+  {id:'p_carne_moida_batata',cat:'Pratos',name:'Carne Moída com Batata',price:0,img:'',type:'prato',active:false},
+  {id:'p_carne_suina',cat:'Pratos',name:'Carne Suína',price:0,img:'',type:'prato',active:false},
+  {id:'p_panqueca',cat:'Pratos',name:'Panqueca de Carne',price:0,img:'',type:'prato',active:false},
+  {id:'p_carne_assada',cat:'Pratos',name:'Carne Assada',price:0,img:'',type:'prato',active:false},
+  {id:'p_frango_molho',cat:'Pratos',name:'Frango ao Molho',price:0,img:'',type:'prato',active:false},
+  {id:'p_carne_mandioca',cat:'Pratos',name:'Carne com Mandioca',price:0,img:'',type:'prato',active:false},
+
+  {id:'m_frango_milanesa',cat:'Marmitas',name:'Frango à Milanesa',price:0,img:'assets/frango_milanesa.jpg',type:'marmita',active:true,desc:'Filé verdadeiro de peito empanado em panko.'},
+  {id:'m_strogonoff',cat:'Marmitas',name:'Strogonoff',price:0,img:'assets/strogonoff.jpg',type:'marmita',active:true,strogonoff:true},
+  {id:'m_carne_suina',cat:'Marmitas',name:'Carne Suína',price:0,img:'',type:'marmita',active:true},
+  {id:'m_almondegas',cat:'Marmitas',name:'Almôndegas',price:0,img:'',type:'marmita',active:true},
+  {id:'m_bife_acebolado',cat:'Marmitas',name:'Bife Acebolado',price:0,img:'assets/bife_acebolado.jpg',type:'marmita',active:false},
+  {id:'m_parmegiana',cat:'Marmitas',name:'Parmegiana',price:0,img:'assets/parmegiana.jpg',type:'marmita',active:false},
+  {id:'m_bisteca',cat:'Marmitas',name:'Bisteca Suína',price:0,img:'',type:'marmita',active:false},
+  {id:'m_tirinhas',cat:'Marmitas',name:'Tirinhas de Carne ao Molho Shoyu',price:0,img:'',type:'marmita',active:false},
+  {id:'m_panqueca',cat:'Marmitas',name:'Panqueca de Carne',price:0,img:'',type:'marmita',active:false},
+  {id:'m_carne_moida_batata',cat:'Marmitas',name:'Carne Moída com Batata',price:0,img:'',type:'marmita',active:false},
+  {id:'m_costela_mandioca',cat:'Marmitas',name:'Costela com Mandioca',price:0,img:'',type:'marmita',active:false},
+  {id:'m_carne_assada',cat:'Marmitas',name:'Carne Assada',price:0,img:'',type:'marmita',active:false},
+  {id:'m_frango_molho',cat:'Marmitas',name:'Frango ao Molho',price:0,img:'',type:'marmita',active:false},
+  {id:'m_carne_mandioca',cat:'Marmitas',name:'Carne com Mandioca',price:0,img:'',type:'marmita',active:false},
+
+  {id:'c_tradicional',cat:'Cuscuz',name:'Cuscuz Tradicional + Café',price:10,img:'',type:'direto',active:true},
+  {id:'c_ovo',cat:'Cuscuz',name:'Cuscuz com Ovo + Café',price:8,img:'assets/cuscuz_ovo.jpg',type:'direto',active:true},
+  {id:'c_queijo',cat:'Cuscuz',name:'Cuscuz com Queijo + Café',price:8,img:'assets/cuscuz_queijo.jpg',type:'direto',active:true},
+  {id:'c_presunto',cat:'Cuscuz',name:'Cuscuz com Queijo e Presunto + Café',price:8,img:'assets/cuscuz_presunto.jpg',type:'direto',active:true},
+  {id:'c_completo',cat:'Cuscuz',name:'Cuscuz com Queijo, Ovo e Presunto + Café',price:10,img:'assets/cuscuz_completo.jpg',type:'direto',active:true},
+
+  {id:'l_bolo',cat:'Lanches',name:'Bolo + Café',price:8,img:'assets/bolo_cafe.jpg',type:'direto',active:true},
+  {id:'l_pao_queijo',cat:'Lanches',name:'Pão de Queijo + Café',price:6,img:'',type:'direto',active:true},
+  {id:'l_pao_ovo',cat:'Lanches',name:'Pão com Ovo + Café',price:8,img:'',type:'direto',active:true},
+  {id:'l_pao_misto',cat:'Lanches',name:'Pão Misto + Café',price:8,img:'assets/misto_quente.jpg',type:'direto',active:true},
+  {id:'l_sanduiche_natural',cat:'Lanches',name:'Sanduíche Natural + Suco ou Café',price:8,img:'assets/sanduiche_natural.jpg',type:'direto',active:true},
+  {id:'l_misto_quente',cat:'Lanches',name:'Misto Quente + Suco ou Café',price:8,img:'assets/misto_quente.jpg',type:'direto',active:true},
+  {id:'l_pao_carne',cat:'Lanches',name:'Pão de Sal com Carne + Suco ou Café',price:8,img:'assets/pao_carne.jpg',type:'direto',active:true},
+
+  {id:'t_presunto',cat:'Tapiocas',name:'Tapioca com Queijo e Presunto + Suco ou Café',price:8,img:'assets/tapioca_presunto.jpg',type:'direto',active:true},
+  {id:'t_queijo',cat:'Tapiocas',name:'Tapioca de Queijo + Suco ou Café',price:8,img:'assets/tapioca_queijo.jpg',type:'direto',active:true},
+  {id:'t_carne',cat:'Tapiocas',name:'Tapioca de Carne + Suco ou Café',price:10,img:'assets/tapioca_carne.jpg',type:'direto',active:true},
+
+  {id:'s_coxinha',cat:'Salgados',name:'Coxinha de Frango + Suco',price:7,img:'assets/coxinha.jpg',type:'direto',active:true},
+  {id:'s_pastel_queijo',cat:'Salgados',name:'Pastel de Queijo ou Queijo com Presunto + Suco',price:10,img:'assets/pastel_queijo.jpg',type:'direto',active:true},
+  {id:'s_pastel_carne',cat:'Salgados',name:'Pastel de Frango ou Carne + Suco',price:12,img:'assets/pastel_carne.jpg',type:'direto',active:true},
+  {id:'s_assado',cat:'Salgados',name:'Salgado Assado + Suco',price:10,img:'assets/salgado_assado.jpg',type:'direto',active:true},
+
+  {id:'v_abacate',cat:'Vitaminas',name:'Vitamina de Abacate + 1 Scoop de Whey Protein',price:10,img:'assets/vitamina_abacate.jpg',type:'direto',active:true},
+  {id:'v_morango',cat:'Vitaminas',name:'Vitamina de Morango + 1 Scoop de Whey Protein',price:10,img:'assets/vitamina_morango.jpg',type:'direto',active:true},
+  {id:'v_banana',cat:'Vitaminas',name:'Vitamina de Banana + 1 Scoop de Whey Protein',price:10,img:'assets/vitamina_banana.jpg',type:'direto',active:true},
+  {id:'v_manga',cat:'Vitaminas',name:'Vitamina de Manga + 1 Scoop de Whey Protein',price:10,img:'assets/vitamina_manga.jpg',type:'direto',active:true},
+
+  {id:'ca_mocoto',cat:'Caldos',name:'Caldo de Mocotó',price:0,img:'',type:'direto',active:false},
+  {id:'ca_verde',cat:'Caldos',name:'Caldo Verde',price:0,img:'',type:'direto',active:false},
+  {id:'ca_frango',cat:'Caldos',name:'Caldo de Frango',price:0,img:'',type:'direto',active:false},
+  {id:'ca_carne_mandioca',cat:'Caldos',name:'Caldo de Carne com Mandioca',price:0,img:'',type:'direto',active:false},
+
+  {id:'b_nescau',cat:'Bebidas',name:'Nescau',price:5,img:'',type:'direto',active:true}
+];
+
+let overrides={};
+try{overrides=JSON.parse(localStorage.getItem('ab_v5_catalog')||'{}')||{}}catch(e){overrides={}}
+let products=defaults.map(p=>Object.assign({},p,overrides[p.id]||{}));
+let marmitaPrices={P:15,M:20,G:26};
+try{marmitaPrices=Object.assign(marmitaPrices,JSON.parse(localStorage.getItem('ab_v5_marmitas')||'{}')||{})}catch(e){}
+let category='Pratos',cart=[],payment='',draft=null,marmitaSize='';
+let orders=[];
+try{orders=JSON.parse(localStorage.getItem('ab_v5_orders')||localStorage.getItem('ab_v4_orders')||'[]')||[]}catch(e){orders=[]}
+
+function money(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',')}
+function esc(s){let d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+function today(){let d=new Date(),m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(x<10?'0':'')+x}
+function saveOrders(){try{localStorage.setItem('ab_v5_orders',JSON.stringify(orders))}catch(e){}}
+function saveCatalog(){let o={};products.forEach(p=>{o[p.id]={price:p.price,active:p.active}});localStorage.setItem('ab_v5_catalog',JSON.stringify(o))}
+function productImg(p){return p.img?'<img src="'+p.img+'" alt="'+esc(p.name)+'" onerror="this.outerHTML=\'<div class=&quot;placeholder&quot;>🍽️</div>\'">':'<div class="placeholder">🍽️</div>'}
+function renderCats(){document.getElementById('cats').innerHTML=categories.map(c=>'<button class="cat '+(c===category?'active':'')+'" onclick="setCat(\''+c+'\')">'+categoryLabels[c]+'</button>').join('')}
 function setCat(c){category=c;renderCats();renderGrid()}
-function renderGrid(){var a=products.filter(function(p){return p.cat===category});document.getElementById("grid").innerHTML=a.map(function(p,i){var idx=products.indexOf(p);return '<button class="product" onclick="pick('+idx+')"><img src="'+p.img+'"><div class="info"><div class="name">'+esc(p.name)+'</div><div class="price">'+money(p.price)+'</div></div></button>'}).join("")}
-function pick(i){var p=products[i];if(p.type==="direto"){cart.push({name:p.name,price:p.price,detail:""});renderCart();return}draft=p;document.getElementById("modalTitle").textContent=p.name;document.getElementById("note").value="";protein="";sides=[];if(p.type==="prato"){document.getElementById("modalBody").innerHTML='<p><b>Prato servido no restaurante.</b></p><p class="small">Use a observação somente se o cliente pedir alguma alteração.</p>'}else{document.getElementById("modalBody").innerHTML='<h3>Proteína</h3><div class="options"><button class="opt prot" onclick="prot(\'Frango à Milanesa\',this)">Frango à Milanesa</button><button class="opt prot" onclick="prot(\'Strogonoff\',this)">Strogonoff</button><button class="opt prot" onclick="prot(\'Bife Acebolado\',this)">Bife Acebolado</button><button class="opt prot" onclick="prot(\'Parmegiana\',this)">Parmegiana</button></div><h3>Acompanhamentos</h3><div class="options"><button class="opt side" onclick="side(\'Arroz\',this)">Arroz</button><button class="opt side" onclick="side(\'Feijão\',this)">Feijão</button><button class="opt side" onclick="side(\'Macarrão\',this)">Macarrão</button><button class="opt side" onclick="side(\'Salada\',this)">Salada</button></div>'}document.getElementById("modal").className="modal open"}
-function prot(x,b){protein=x;var a=document.getElementsByClassName("prot");for(var i=0;i<a.length;i++)a[i].className="opt prot";b.className="opt prot selected"}
-function side(x,b){var i=sides.indexOf(x);if(i>=0){sides.splice(i,1);b.className="opt side"}else{sides.push(x);b.className="opt side selected"}}
-function closeModal(){document.getElementById("modal").className="modal"}
-function addConfigured(){var note=document.getElementById("note").value;if(draft.type==="marmita"&&!protein){alert("Escolha a proteína.");return}var detail=draft.type==="prato"?"PRATO NO RESTAURANTE"+(note?" | Obs.: "+note:""):"Proteína: "+protein+" | Acompanhamentos: "+(sides.length?sides.join(", "):"nenhum")+(note?" | Obs.: "+note:"");cart.push({name:draft.name,price:draft.price,detail:detail});closeModal();renderCart()}
-function renderCart(){var h="";for(var i=0;i<cart.length;i++)h+='<div class="line"><b>'+esc(cart[i].name)+'</b><div class="small">'+esc(cart[i].detail)+'</div></div>';document.getElementById("cart").innerHTML=h||'<span class="small">Nenhum item.</span>';var t=0;for(i=0;i<cart.length;i++)t+=cart[i].price;document.getElementById("total").textContent=money(t)}
-function paySel(p,b){payment=p;var a=document.getElementsByClassName("pay");for(var i=0;i<a.length;i++)a[i].className="pay";b.className="pay selected"}
-function clearCart(){cart=[];payment="";renderCart();var a=document.getElementsByClassName("pay");for(var i=0;i<a.length;i++)a[i].className="pay"}
-function nextNum(){var max=0,d=today();for(var i=0;i<orders.length;i++)if(orders[i].day===d&&orders[i].num>max)max=orders[i].num;return max+1}
-function finish(){if(!cart.length)return alert("Selecione um item.");if(!payment)return alert("Escolha o pagamento.");var n=nextNum(),t=0;for(var i=0;i<cart.length;i++)t+=cart[i].price;var o={id:String(Date.now())+Math.random(),day:today(),num:n,ticket:"A"+("000"+n).slice(-3),items:cart.slice(),payment:payment,total:t,status:"preparo"};orders.unshift(o);save();printReceipt(o);clearCart();renderKitchen();renderReady()}
-function printReceipt(o){var h='<div style="text-align:center"><b>RESTAURANTE E LANCHONETE ABENÇOADA</b><hr><div style="font-size:34px;font-weight:900">SENHA '+o.ticket+'</div><hr></div>';for(var i=0;i<o.items.length;i++)h+='<b>'+esc(o.items[i].name)+'</b><br>'+esc(o.items[i].detail)+'<br><br>';h+='<hr><b>TOTAL: '+money(o.total)+'</b><br>Pagamento: '+o.payment;document.getElementById("receipt").innerHTML=h;window.print()}
-function renderKitchen(){var h="",d=today();for(var i=0;i<orders.length;i++){var o=orders[i];if(o.day!==d||o.status==="entregue")continue;h+='<div class="ticketcard '+(o.status==="pronto"?"ready":"")+'"><div class="ticket">'+o.ticket+'</div><b>'+(o.status==="pronto"?"PRONTO":"EM PREPARO")+'</b><hr>';for(var j=0;j<o.items.length;j++)h+='<p><b>'+esc(o.items[j].name)+'</b><br>'+esc(o.items[j].detail).split(" | ").join("<br>")+'</p>';h+=o.status==="preparo"?'<button class="primary" onclick="ready(\''+o.id+'\')">PRONTO</button>':'<button class="secondary" onclick="delivered(\''+o.id+'\')">ENTREGUE</button>';h+='</div>'}document.getElementById("kitchen").innerHTML=h||"Nenhum pedido ativo."}
-function ready(id){for(var i=0;i<orders.length;i++)if(orders[i].id===id)orders[i].status="pronto";save();renderKitchen();renderReady()}
-function delivered(id){for(var i=0;i<orders.length;i++)if(orders[i].id===id)orders[i].status="entregue";save();renderKitchen();renderReady()}
-function renderReady(){var h="",d=today();for(var i=0;i<orders.length;i++)if(orders[i].day===d&&orders[i].status==="pronto")h+='<div class="readybox"><div>SENHA</div><div class="ticket">'+orders[i].ticket+'</div><b>PRONTO PARA RETIRADA</b></div>';document.getElementById("ready").innerHTML=h||"Nenhuma senha pronta."}
-function screen(id,b){var a=document.getElementsByClassName("screen");for(var i=0;i<a.length;i++)a[i].className="screen";document.getElementById(id).className="screen active";var n=document.querySelectorAll("nav button");for(i=0;i<n.length;i++)n[i].className="";b.className="active"}
+function renderGrid(){
+  let a=products.filter(p=>p.cat===category&&p.active);
+  if(!a.length){document.getElementById('grid').innerHTML='<div class="empty" style="grid-column:1/-1"><b>Nenhum item disponível nesta categoria hoje.</b><br><span class="small">Ative os itens em “Gerenciar cardápio”.</span></div>';return}
+  document.getElementById('grid').innerHTML=a.map(p=>{
+    let price=p.type==='marmita'?'<div class="sizes">P '+money(marmitaPrices.P)+' • M '+money(marmitaPrices.M)+' • G '+money(marmitaPrices.G)+'</div>':(p.price>0?'<div class="price">'+money(p.price)+'</div>':'<div class="badge">Definir preço</div>');
+    let desc=p.desc?'<div class="desc">'+esc(p.desc)+'</div>':'';
+    return '<button class="product" onclick="pick(\''+p.id+'\')">'+productImg(p)+'<div class="info"><div class="name">'+esc(p.name)+'</div>'+desc+price+'</div></button>'
+  }).join('')
+}
+function pick(id){
+  let p=products.find(x=>x.id===id);if(!p)return;
+  if(p.type!=='marmita'&&Number(p.price)<=0){alert('Defina o preço deste item em Gerenciar cardápio.');return}
+  if(p.type==='direto'){cart.push({name:p.name,price:Number(p.price),detail:''});renderCart();return}
+  draft=p;marmitaSize='';document.getElementById('modalTitle').textContent=p.name;document.getElementById('note').value='';
+  if(p.type==='prato'){
+    document.getElementById('modalBody').innerHTML='<p><b>PRATO SERVIDO NO RESTAURANTE</b></p>'+(p.desc?'<p>'+esc(p.desc)+'</p>':'')+'<p class="small">Use a observação somente se o cliente pedir alguma alteração.</p>'
+  }else{
+    let accomp=p.strogonoff?'Arroz branco + Strogonoff + Batata palha':'Arroz branco + Feijão carioca/de caldo + Farofa + Alface + 3 rodelas de tomate + '+esc(p.name);
+    document.getElementById('modalBody').innerHTML='<h3>Tamanho da marmita</h3><div class="options"><button class="opt size" onclick="sizeSel(\'P\',this)">P — '+money(marmitaPrices.P)+'</button><button class="opt size" onclick="sizeSel(\'M\',this)">M — '+money(marmitaPrices.M)+'</button><button class="opt size" onclick="sizeSel(\'G\',this)">G — '+money(marmitaPrices.G)+'</button></div><h3>Acompanha</h3><p><b>'+accomp+'</b></p>'+(p.desc?'<p class="small">'+esc(p.desc)+'</p>':'')
+  }
+  document.getElementById('modal').className='modal open'
+}
+function sizeSel(s,b){marmitaSize=s;document.querySelectorAll('.size').forEach(x=>x.className='opt size');b.className='opt size selected'}
+function closeModal(){document.getElementById('modal').className='modal'}
+function addConfigured(){
+  if(!draft)return;
+  let note=document.getElementById('note').value.trim();
+  if(draft.type==='marmita'&&!marmitaSize){alert('Escolha o tamanho da marmita.');return}
+  let detail='',price=Number(draft.price);
+  if(draft.type==='prato') detail='PRATO NO RESTAURANTE'+(note?' | Obs.: '+note:'');
+  else{
+    price=Number(marmitaPrices[marmitaSize]);
+    let accomp=draft.strogonoff?'Arroz branco, Strogonoff e Batata palha':'Arroz branco, Feijão carioca/de caldo, Farofa, Alface, 3 rodelas de tomate e '+draft.name;
+    detail='Marmita '+marmitaSize+' | Acompanha: '+accomp+(note?' | Obs.: '+note:'')
+  }
+  cart.push({name:draft.name,price:price,detail:detail});draft=null;closeModal();renderCart()
+}
+function renderCart(){
+  let h='';cart.forEach((item,i)=>{h+='<div class="line"><div class="line-row"><div><b>'+esc(item.name)+'</b><div class="small">'+esc(item.detail)+'</div><div><b>'+money(item.price)+'</b></div></div><button class="remove" onclick="removeCart('+i+')">Retirar</button></div></div>'});
+  document.getElementById('cart').innerHTML=h||'<span class="small">Nenhum item.</span>';document.getElementById('total').textContent=money(cart.reduce((s,x)=>s+Number(x.price),0))
+}
+function removeCart(i){cart.splice(i,1);renderCart()}
+function paySel(p,b){payment=p;document.querySelectorAll('.pay').forEach(x=>x.className='pay');b.className='pay selected'}
+function clearCart(){cart=[];payment='';renderCart();document.querySelectorAll('.pay').forEach(x=>x.className='pay')}
+function nextNum(){let max=0,d=today();orders.forEach(o=>{if(o.day===d&&o.num>max)max=o.num});return max+1}
+function finish(){
+  if(!cart.length)return alert('Selecione um item.');if(!payment)return alert('Escolha o pagamento.');
+  let n=nextNum(),t=cart.reduce((s,x)=>s+Number(x.price),0),o={id:String(Date.now())+Math.random(),day:today(),num:n,ticket:'A'+('000'+n).slice(-3),items:cart.slice(),payment:payment,total:t,status:'preparo'};
+  orders.unshift(o);saveOrders();printReceipt(o);clearCart();renderKitchen();renderReady()
+}
+function printReceipt(o){
+  let h='<div style="text-align:center"><b>RESTAURANTE E LANCHONETE ABENÇOADA</b><hr><div style="font-size:34px;font-weight:900">SENHA '+o.ticket+'</div><hr></div>';
+  o.items.forEach(x=>{h+='<b>'+esc(x.name)+'</b><br>'+esc(x.detail)+'<br>'+money(x.price)+'<br><br>'});
+  h+='<hr><b>TOTAL: '+money(o.total)+'</b><br>Pagamento: '+esc(o.payment);document.getElementById('receipt').innerHTML=h;window.print()
+}
+function renderKitchen(){
+  let h='',d=today();orders.forEach(o=>{if(o.day!==d||o.status==='entregue')return;h+='<div class="ticketcard '+(o.status==='pronto'?'ready':'')+'"><div class="ticket">'+o.ticket+'</div><b>'+(o.status==='pronto'?'PRONTO':'EM PREPARO')+'</b><hr>';o.items.forEach(x=>{h+='<p><b>'+esc(x.name)+'</b><br>'+esc(x.detail).split(' | ').join('<br>')+'</p>'});h+=o.status==='preparo'?'<button class="primary" onclick="ready(\''+o.id+'\')">PRONTO</button>':'<button class="secondary" style="width:100%" onclick="delivered(\''+o.id+'\')">ENTREGUE</button>';h+='</div>'});document.getElementById('kitchen').innerHTML=h||'Nenhum pedido ativo.'
+}
+function ready(id){orders.forEach(o=>{if(o.id===id)o.status='pronto'});saveOrders();renderKitchen();renderReady()}
+function delivered(id){orders.forEach(o=>{if(o.id===id)o.status='entregue'});saveOrders();renderKitchen();renderReady()}
+function renderReady(){let h='',d=today();orders.forEach(o=>{if(o.day===d&&o.status==='pronto')h+='<div class="readybox"><div>SENHA</div><div class="ticket">'+o.ticket+'</div><b>PRONTO PARA RETIRADA</b></div>'});document.getElementById('ready').innerHTML=h||'Nenhuma senha pronta.'}
+function screen(id,b){document.querySelectorAll('.screen').forEach(x=>x.className='screen');document.getElementById(id).className='screen active';document.querySelectorAll('nav button').forEach(x=>x.className='');b.className='active';if(id==='gerenciar')renderAdmin()}
+function renderAdmin(){
+  document.getElementById('mp').value=marmitaPrices.P;document.getElementById('mm').value=marmitaPrices.M;document.getElementById('mg').value=marmitaPrices.G;
+  let h='';categories.forEach(c=>{let list=products.filter(p=>p.cat===c);h+='<h3 class="section-title">'+categoryLabels[c]+'</h3><table class="admin-table"><thead><tr><th>Item</th><th>Categoria</th><th>Preço</th><th>Disponível</th></tr></thead><tbody>';list.forEach(p=>{let price=p.type==='marmita'?'<span class="small">P/M/G</span>':'<input type="number" min="0" step="0.50" value="'+Number(p.price||0)+'" onchange="setPrice(\''+p.id+'\',this.value)">';h+='<tr><td><b>'+esc(p.name)+'</b></td><td>'+categoryLabels[p.cat]+'</td><td>'+price+'</td><td><label class="switch"><input type="checkbox" '+(p.active?'checked':'')+' onchange="toggleProduct(\''+p.id+'\',this)"> Sim</label></td></tr>'});h+='</tbody></table>'});document.getElementById('adminCatalog').innerHTML=h
+}
+function setPrice(id,v){let p=products.find(x=>x.id===id);if(!p)return;p.price=Math.max(0,Number(v)||0);if(p.price<=0)p.active=false;saveCatalog();renderAdmin();renderGrid()}
+function toggleProduct(id,el){let p=products.find(x=>x.id===id);if(!p)return;if(p.type!=='marmita'&&Number(p.price)<=0&&el.checked){alert('Informe primeiro o preço deste item.');el.checked=false;return}p.active=!!el.checked;saveCatalog();renderGrid()}
+function saveMarmitaPrices(){marmitaPrices.P=Math.max(0,Number(document.getElementById('mp').value)||0);marmitaPrices.M=Math.max(0,Number(document.getElementById('mm').value)||0);marmitaPrices.G=Math.max(0,Number(document.getElementById('mg').value)||0);localStorage.setItem('ab_v5_marmitas',JSON.stringify(marmitaPrices));renderGrid()}
+
 renderCats();renderGrid();renderCart();renderKitchen();renderReady();
-</script></body></html>
+</script>
+</body>
+</html>
