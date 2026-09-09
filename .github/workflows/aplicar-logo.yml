@@ -17,10 +17,56 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Aplicar logo e limpar cabeçalho
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
+          set -euo pipefail
+          mkdir -p assets
+          curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/git/blobs/f1cea5bc0ea050a18ce93554365b84a2845e0197" \
+            | python3 -c 'import sys,json,base64; d=json.load(sys.stdin); sys.stdout.buffer.write(base64.b64decode(d["content"]))' \
+            > assets/logo-abencoada.jpg
+
           python3 - <<'PY'
           from pathlib import Path
-          import base64
 
-          logo_b64 = '''/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIi
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          s = s.replace(
+              '<title>Mini Sistema de Vendas | Restaurante e Lanchonete Abençoada</title>',
+              '<title>Restaurante e Lanchonete Abençoada | Cardápio Digital</title>'
+          )
+
+          old_css = '.mark{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:var(--yellow);color:#6d1708;font-weight:900;font-size:26px;border:4px solid #fff0b6}.brand h1{font-size:30px;line-height:1;margin:0}.brand p{margin:6px 0 0;color:#ffeaa7;font-weight:700}'
+          new_css = '.mark{width:132px;height:96px;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#000;flex:0 0 auto;box-shadow:0 6px 16px #0003}.mark img{width:100%;height:100%;object-fit:contain;display:block}.brand h1{font-size:30px;line-height:1.05;margin:0}'
+          if old_css not in s:
+              raise SystemExit('CSS original da marca não encontrado')
+          s = s.replace(old_css, new_css, 1)
+
+          old_mobile = '.mark{width:60px;height:60px;font-size:22px}.brand h1{font-size:23px}'
+          new_mobile = '.mark{width:108px;height:80px}.brand h1{font-size:21px}'
+          if old_mobile not in s:
+              raise SystemExit('CSS mobile original da marca não encontrado')
+          s = s.replace(old_mobile, new_mobile, 1)
+
+          old_header = '<div class="top"><div class="brand"><div class="mark">A+</div><div><h1>Restaurante e Lanchonete Abençoada</h1><p>Mini sistema de vendas • rápido, moderno e dinâmico</p></div></div><div class="pills"><span class="pill">Qualidade • Sabor • Preço Justo</span><span class="pill">Deus abençoe a sua vida!</span></div></div>'
+          new_header = '<div class="top"><div class="brand"><div class="mark"><img src="assets/logo-abencoada.jpg" alt="Logo Restaurante Abençoada"></div><div><h1>Restaurante e Lanchonete Abençoada</h1></div></div><div class="pills"><span class="pill">Qualidade • Sabor • Preço Justo</span><span class="pill">Deus abençoe a sua vida!</span></div></div>'
+          if old_header not in s:
+              raise SystemExit('Cabeçalho original não encontrado')
+          s = s.replace(old_header, new_header, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+          rm -f .github/workflows/aplicar-logo.yml
+          git config user.name "Restaurante Abençoada Bot"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "Insere logo oficial e limpa cabeçalho"
+          git push origin main
+
+          gh workflow run deploy-pages.yml --ref main
